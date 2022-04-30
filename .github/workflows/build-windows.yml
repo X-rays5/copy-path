@@ -26,6 +26,7 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: ${{env.BUILD_TYPE}}/copypath.exe
+        tag_name: x64 Windows build
+        files: ${{env.BUILD_TYPE}}\copypath.exe
         generate_release_notes: true
-        token: ${{ secrets.RELEASE_ACCESS_TOKEN }}
+        token: ${{secrets.RELEASE_ACCESS_TOKEN}}
