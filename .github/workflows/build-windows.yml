@@ -22,3 +22,10 @@ jobs:
       
     - name: Build
       run: cmake --build . --config ${{env.BUILD_TYPE}}
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ${{env.BUILD_TYPE}}/copypath.exe
+        generate_release_notes: true
+        token: ${{ secrets.RELEASE_ACCESS_TOKEN }}
