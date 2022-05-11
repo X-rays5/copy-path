@@ -76,7 +76,6 @@ LSTATUS DeleteRegistryKey(HKEY key_handle, const std::string& path) {
 
 #define REGISTRY_FILE "*\\shell"
 #define REGISTRY_DIRECTORY "Directory\\shell"
-#define REGISTRY_DIRECTORY_BACKGROUND "Directory\\Background\\shell"
 #define SUB_KEY "CopyPath"
 #define CONTEXT_MENU_NAME (const char*)"Copy path to clipboard"
 
@@ -122,10 +121,6 @@ void Install(const std::string& exe_path) {
     InstallRegistry(key, curr_path.filename().string(), install_path.string(), command.str());
     RegCloseKey(*key);
 
-    key = OpenRegistryKey(HKEY_CLASSES_ROOT, REGISTRY_DIRECTORY_BACKGROUND, KEY_ALL_ACCESS);
-    InstallRegistry(key, curr_path.filename().string(), install_path.string(), command.str());
-    RegCloseKey(*key);
-
     RestartExplorer();
   } else {
     std::cout << "Failed to install.";
@@ -143,10 +138,6 @@ void Uninstall() {
   RegCloseKey(*key);
 
   key = OpenRegistryKey(HKEY_CLASSES_ROOT, REGISTRY_DIRECTORY, KEY_ALL_ACCESS);
-  RegDeleteTree(*key, SUB_KEY);
-  RegCloseKey(*key);
-
-  key = OpenRegistryKey(HKEY_CLASSES_ROOT, REGISTRY_DIRECTORY_BACKGROUND, KEY_ALL_ACCESS);
   RegDeleteTree(*key, SUB_KEY);
   RegCloseKey(*key);
 
