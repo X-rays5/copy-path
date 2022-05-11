@@ -37,6 +37,17 @@ void CreateConsole() {
   freopen("CONIN$", "r", stdin);
 }
 
+void RestartExplorer() {
+  std::cout << "Explorer needs to be restarted to apply changes.\n";
+  std::cout << "Restart Explorer? (y/n): ";
+  std::string input;
+  std::getline(std::cin, input);
+
+  if (input == "y" || input == "Y") {
+    system("taskkill /f /im explorer.exe && explorer.exe");
+  }
+}
+
 std::shared_ptr<HKEY> OpenRegistryKey(HKEY key_handle, const std::string& path, REGSAM access) {
   auto key = std::make_shared<HKEY>();
   RegOpenKeyEx(key_handle, path.c_str(), 0, access, key.get());
@@ -114,6 +125,8 @@ void Install(const std::string& exe_path) {
     key = OpenRegistryKey(HKEY_CLASSES_ROOT, REGISTRY_DIRECTORY_BACKGROUND, KEY_ALL_ACCESS);
     InstallRegistry(key, curr_path.filename().string(), install_path.string(), command.str());
     RegCloseKey(*key);
+
+    RestartExplorer();
   } else {
     std::cout << "Failed to install.";
     char c;
@@ -136,6 +149,8 @@ void Uninstall() {
   key = OpenRegistryKey(HKEY_CLASSES_ROOT, REGISTRY_DIRECTORY_BACKGROUND, KEY_ALL_ACCESS);
   RegDeleteTree(*key, SUB_KEY);
   RegCloseKey(*key);
+
+  RestartExplorer();
 }
 
 void InstallOrUninstall(const std::string& exe_path) {
